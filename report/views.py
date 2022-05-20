@@ -1,17 +1,22 @@
 from django.shortcuts import render
 from rest_framework import status, permissions
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from .models import User, Report
 from .serializers import UserSerializer, ReportSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-# Create your views here.
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([CsrfExemptSessionAuthentication, BasicAuthentication])
 @permission_classes((permissions.AllowAny,))
-@csrf_exempt
 def user_list(request, format=None):
     '''
     Get list of users (people who can be reported)
@@ -29,8 +34,8 @@ def user_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([CsrfExemptSessionAuthentication, BasicAuthentication])
 @permission_classes((permissions.AllowAny,))
-@csrf_exempt
 def user_detail(request, pk, format=None):
     '''
     Perform actions on individual users (people who can be reported)
@@ -50,7 +55,6 @@ def user_detail(request, pk, format=None):
 
     elif request.method == 'PUT':
         serializer = UserSerializer(data=request.data)
-        bob = "oi levi"
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -62,8 +66,8 @@ def user_detail(request, pk, format=None):
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes([CsrfExemptSessionAuthentication, BasicAuthentication])
 @permission_classes((permissions.AllowAny,))
-@csrf_exempt
 def report_list(request, first_name="", last_name="", format=None):
     '''
     Get list of all reports for all users
@@ -101,8 +105,8 @@ def report_list(request, first_name="", last_name="", format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([CsrfExemptSessionAuthentication, BasicAuthentication])
 @permission_classes((permissions.AllowAny,))
-@csrf_exempt
 def report_detail(request, pk, format=None):
     '''
     Perform actions on individual reports given a report id
