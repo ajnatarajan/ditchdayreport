@@ -2,10 +2,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  color: #fff;
   padding-top: 30px;
   padding-bottom: 30px;
-  font-family: "Play";
   font-size: 2em;
   background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.66) 100%);
 }
