@@ -19,4 +19,5 @@ class ReportSerializer(serializers.ModelSerializer):
             "verbal_abuse_opt",
             "unskilled_player_opt",
             "is_andy_tong_opt",
+            "user",
         ]

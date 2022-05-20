@@ -11,7 +11,29 @@ async function populateDropdown() {
     document.querySelector(".report-dropdown").appendChild(opt);
   }
 }
-function populateLeaderboard() {}
+
+async function populateLeaderboard() {
+  let data = await fetch("http://localhost:8000/api/reports");
+  data = await data.json();
+  let reports = {};
+  for (let i = 0; i < data.length; i++) {
+    let user_id = data[i].user;
+    if (user_id in reports) {
+      reports[user_id].push(data);
+    } else {
+      reports[user_id] = [data];
+    }
+  }
+  // last item in each array is the latest report (chronologically stored)
+  // length of each array is the total number of reports
+
+  // get name from user id:
+  let user_id = 1 // CHANGE THIS TO DESIRED USER ID
+  let name = await fetch("http://localhost:8000/api/users/" + user_id);
+  name = await name.json();
+  let first_name = name['first_name'];
+  let last_name = name['last_name'];
+}
 
 function ReportSection() {
   const [numReports, setNumReports] = useState(0);
@@ -31,6 +53,16 @@ function ReportSection() {
       .checked;
     const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
     const report_reason = document.querySelector("textarea").value;
+    let data = {
+      player: player,
+      is_negative_attitude: is_negative_attitude,
+      is_trolling: is_trolling,
+      is_verbal_abuse: is_verbal_abuse,
+      is_unskilled_player: is_unskilled_player,
+      is_is_andy_tong: is_is_andy_tong,
+      report_reason: report_reason,
+    }
+    let response = await fetch("http://localhost:8000/api/report", data);
     setNumReports((prev) => {
       return prev + 1;
     });

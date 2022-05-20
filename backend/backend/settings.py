@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ddayreport',
         'USER': 'postgres',
-        'PASSWORD': 'liquidhacks',
+        'PASSWORD': 'queueup241',
         'HOST': 'localhost',
         'PORT': 5432
     }
