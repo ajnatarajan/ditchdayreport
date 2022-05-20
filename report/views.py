@@ -4,10 +4,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import User, Report
 from .serializers import UserSerializer, ReportSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny,))
 def user_list(request, format=None):
@@ -26,6 +28,7 @@ def user_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.AllowAny,))
 def user_detail(request, pk, format=None):
@@ -57,6 +60,7 @@ def user_detail(request, pk, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny,))
 def report_list(request, first_name="", last_name="", format=None):
@@ -95,6 +99,7 @@ def report_list(request, first_name="", last_name="", format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.AllowAny,))
 def report_detail(request, pk, format=None):
