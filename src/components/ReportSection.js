@@ -39,22 +39,6 @@ async function populateLeaderboard() {
   });
 
   let table = document.querySelector("table");
-  while (table.firstChild) {
-    table.removeChild(table.firstChild);
-  }
-
-  /* Add back header */
-  let tr_head = document.createElement("tr");
-  let th_name = document.createElement("th");
-  th_name.textContent = "Name";
-  let th_report_num = document.createElement("th");
-  th_report_num.textContent = "Number of Reports";
-  let th_recent_comment = document.createElement("th");
-  th_recent_comment.textContent = "Most Recent Comment";
-  tr_head.appendChild(th_name);
-  tr_head.appendChild(th_report_num);
-  tr_head.appendChild(th_recent_comment);
-  table.appendChild(tr_head);
 
   for (let i = 0; i < Math.min(report_counts.length, 5); i++) {
     let name = await fetch(
@@ -65,35 +49,15 @@ async function populateLeaderboard() {
   }
 
   for (let i = 0; i < Math.min(report_counts.length, 5); i++) {
-    let tr = document.createElement("tr");
-    let td_name = document.createElement("td");
-    td_name.classList.add("name");
-    td_name.textContent = report_counts[i].name;
-    let td_number = document.createElement("td");
-    td_number.classList.add("number");
-    td_number.textContent = report_counts[i].report_count;
+    document.getElementById("name-" + (i + 1)).textContent =
+      report_counts[i].name;
+    document.getElementById("number-" + (i + 1)).textContent =
+      report_counts[i].report_count;
+
     let reports_on_this_user = reports[report_counts[i].user_id];
-    let td_comment = document.createElement("td");
-    td_comment.classList.add("comment");
-    td_comment.textContent =
+    document.getElementById("comment-" + (i + 1)).textContent =
       reports_on_this_user[reports_on_this_user.length - 1].report_text;
-
-    tr.appendChild(td_name);
-    tr.appendChild(td_number);
-    tr.appendChild(td_comment);
-
-    table.appendChild(tr);
   }
-
-  // // last item in each array is the latest report (chronologically stored)
-  // // length of each array is the total number of reports
-
-  // // get name from user id:
-  // let user_id = 1; // CHANGE THIS TO DESIRED USER ID
-  // let name = await fetch("http://localhost:8000/api/users/" + user_id);
-  // name = await name.json();
-  // let first_name = name["first_name"];
-  // let last_name = name["last_name"];
 }
 
 function ReportSection() {
@@ -101,7 +65,7 @@ function ReportSection() {
   const [lastReported, setLastReported] = useState("No reports yet");
   useEffect(() => {
     populateDropdown();
-    populateLeaderboard();
+    setInterval(populateLeaderboard, 300);
   }, []);
 
   async function executeReport() {
