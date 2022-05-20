@@ -12,7 +12,16 @@ async function populateDropdown() {
   }
 }
 
-function executeReport() {}
+function executeReport() {
+  const player = document.querySelector(".report-dropdown").value;
+  const is_negative_attitude = document.querySelector("#negative-attitude")
+    .checked;
+  const is_trolling = document.querySelector("#trolling").checked;
+  const is_verbal_abuse = document.querySelector("#verbal-abuse").checked;
+  const is_unskilled_player = document.querySelector("#unskilled-player")
+    .checked;
+  const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
+}
 function populateLeaderboard() {}
 
 function ReportSection() {
