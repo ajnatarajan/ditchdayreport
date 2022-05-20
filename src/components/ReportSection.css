@@ -89,4 +89,6 @@
 
 input[type="checkbox"] {
   accent-color: #785a28;
+  transform: scale(2);
+  -webkit-transform: scale(2);
 }
