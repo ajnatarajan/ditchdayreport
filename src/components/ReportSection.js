@@ -1,5 +1,6 @@
 import "./ReportSection.css";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 async function populateDropdown() {
   let data = await fetch("http://localhost:8000/api/users");
@@ -19,20 +20,80 @@ async function populateLeaderboard() {
   for (let i = 0; i < data.length; i++) {
     let user_id = data[i].user;
     if (user_id in reports) {
-      reports[user_id].push(data);
+      reports[user_id].push(data[i]);
     } else {
-      reports[user_id] = [data];
+      reports[user_id] = [data[i]];
     }
   }
-  // last item in each array is the latest report (chronologically stored)
-  // length of each array is the total number of reports
 
-  // get name from user id:
-  let user_id = 1 // CHANGE THIS TO DESIRED USER ID
-  let name = await fetch("http://localhost:8000/api/users/" + user_id);
-  name = await name.json();
-  let first_name = name['first_name'];
-  let last_name = name['last_name'];
+  let report_counts = [];
+  for (const [key, value] of Object.entries(reports)) {
+    report_counts.push({ user_id: key, report_count: value.length });
+  }
+
+  report_counts.sort(function (x, y) {
+    if (x["report_count"] == y["report_count"]) return 0;
+    else if (parseInt(x["report_count"]) < parseInt(y["report_count"]))
+      return 1;
+    else return -1;
+  });
+
+  let table = document.querySelector("table");
+  while (table.firstChild) {
+    table.removeChild(table.firstChild);
+  }
+
+  /* Add back header */
+  let tr_head = document.createElement("tr");
+  let th_name = document.createElement("th");
+  th_name.textContent = "Name";
+  let th_report_num = document.createElement("th");
+  th_report_num.textContent = "Number of Reports";
+  let th_recent_comment = document.createElement("th");
+  th_recent_comment.textContent = "Most Recent Comment";
+  tr_head.appendChild(th_name);
+  tr_head.appendChild(th_report_num);
+  tr_head.appendChild(th_recent_comment);
+  table.appendChild(tr_head);
+
+  for (let i = 0; i < Math.min(report_counts.length, 5); i++) {
+    let name = await fetch(
+      "http://localhost:8000/api/users/" + report_counts[i].user_id
+    );
+    name = await name.json();
+    report_counts[i]["name"] = name["first_name"] + " " + name["last_name"];
+  }
+
+  for (let i = 0; i < Math.min(report_counts.length, 5); i++) {
+    let tr = document.createElement("tr");
+    let td_name = document.createElement("td");
+    td_name.classList.add("name");
+    td_name.textContent = report_counts[i].name;
+    let td_number = document.createElement("td");
+    td_number.classList.add("number");
+    td_number.textContent = report_counts[i].report_count;
+    let reports_on_this_user = reports[report_counts[i].user_id];
+    let td_comment = document.createElement("td");
+    td_comment.classList.add("comment");
+    td_comment.textContent =
+      reports_on_this_user[reports_on_this_user.length - 1].report_text;
+
+    tr.appendChild(td_name);
+    tr.appendChild(td_number);
+    tr.appendChild(td_comment);
+
+    table.appendChild(tr);
+  }
+
+  // // last item in each array is the latest report (chronologically stored)
+  // // length of each array is the total number of reports
+
+  // // get name from user id:
+  // let user_id = 1; // CHANGE THIS TO DESIRED USER ID
+  // let name = await fetch("http://localhost:8000/api/users/" + user_id);
+  // name = await name.json();
+  // let first_name = name["first_name"];
+  // let last_name = name["last_name"];
 }
 
 function ReportSection() {
@@ -43,7 +104,7 @@ function ReportSection() {
     populateLeaderboard();
   }, []);
 
-  function executeReport() {
+  async function executeReport() {
     const player = document.querySelector(".report-dropdown").value;
     const is_negative_attitude = document.querySelector("#negative-attitude")
       .checked;
@@ -61,8 +122,8 @@ function ReportSection() {
       is_unskilled_player: is_unskilled_player,
       is_is_andy_tong: is_is_andy_tong,
       report_reason: report_reason,
-    }
-    let response = await fetch("http://localhost:8000/api/report", data);
+    };
+    let response = await axios.post("http://localhost:8000/api/reports", data);
     setNumReports((prev) => {
       return prev + 1;
     });
