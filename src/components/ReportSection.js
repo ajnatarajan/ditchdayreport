@@ -15,6 +15,7 @@ function populateLeaderboard() {}
 
 function ReportSection() {
   const [numReports, setNumReports] = useState(0);
+  const [lastReported, setLastReported] = useState("No reports yet");
   useEffect(() => {
     populateDropdown();
     populateLeaderboard();
@@ -29,9 +30,11 @@ function ReportSection() {
     const is_unskilled_player = document.querySelector("#unskilled-player")
       .checked;
     const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
+    const report_reason = document.querySelector("textarea").value;
     setNumReports((prev) => {
       return prev + 1;
     });
+    setLastReported(player);
   }
 
   return (
@@ -115,6 +118,7 @@ function ReportSection() {
           REPORT
         </button>
         <div className="num-reports">Reports submitted: {numReports}</div>
+        <div className="last-reported">Last Reported: {lastReported}</div>
       </div>
     </div>
   );
