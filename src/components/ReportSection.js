@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 async function populateDropdown() {
-  let data = await fetch("http://localhost:8000/api/users");
+  let data = await fetch("/api/users");
   data = await data.json();
   for (let i = 0; i < data.length; i++) {
     let opt = document.createElement("option");
@@ -14,7 +14,7 @@ async function populateDropdown() {
 }
 
 async function populateLeaderboard() {
-  let data = await fetch("http://localhost:8000/api/reports");
+  let data = await fetch("/api/reports");
   data = await data.json();
   let reports = {};
   for (let i = 0; i < data.length; i++) {
@@ -41,9 +41,7 @@ async function populateLeaderboard() {
   let table = document.querySelector("table");
 
   for (let i = 0; i < Math.min(report_counts.length, 5); i++) {
-    let name = await fetch(
-      "http://localhost:8000/api/users/" + report_counts[i].user_id
-    );
+    let name = await fetch("/api/users/" + report_counts[i].user_id);
     name = await name.json();
     report_counts[i]["name"] = name["first_name"] + " " + name["last_name"];
   }
@@ -70,12 +68,12 @@ function ReportSection() {
 
   async function executeReport() {
     const player = document.querySelector(".report-dropdown").value;
-    const is_negative_attitude = document.querySelector("#negative-attitude")
-      .checked;
+    const is_negative_attitude =
+      document.querySelector("#negative-attitude").checked;
     const is_trolling = document.querySelector("#trolling").checked;
     const is_verbal_abuse = document.querySelector("#verbal-abuse").checked;
-    const is_unskilled_player = document.querySelector("#unskilled-player")
-      .checked;
+    const is_unskilled_player =
+      document.querySelector("#unskilled-player").checked;
     const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
     const report_reason = document.querySelector("textarea").value;
     let data = {
@@ -87,7 +85,7 @@ function ReportSection() {
       is_is_andy_tong: is_is_andy_tong,
       report_reason: report_reason,
     };
-    let response = await axios.post("http://localhost:8000/api/reports", data);
+    let response = await axios.post("/api/reports", data);
     setNumReports((prev) => {
       return prev + 1;
     });
