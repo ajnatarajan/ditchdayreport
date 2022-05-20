@@ -3,7 +3,7 @@ import "./Leaderboard.css";
 function Leaderboard() {
   return (
     <div className="leaderboard-section">
-      <div className="main-title">Top 10 Leaderboard</div>
+      <div className="main-title">Top 5 Leaderboard</div>
       <table>
         <tr>
           <th>Name</th>

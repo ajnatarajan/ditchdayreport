@@ -1,6 +1,15 @@
 import "./ReportSection.css";
+import { useEffect } from "react";
+
+function populateDropdown() {}
+function executeReport() {}
+function populateLeaderboard() {}
 
 function ReportSection() {
+  useEffect(() => {
+    populateDropdown();
+    populateLeaderboard();
+  }, []);
   return (
     <div className="report-section">
       <div className="report-box">
@@ -84,7 +93,9 @@ function ReportSection() {
           className="report-reason"
           placeholder="Reason for report..."
         ></textarea>
-        <button className="report-button">REPORT</button>
+        <button className="report-button" onClick={executeReport}>
+          REPORT
+        </button>
       </div>
     </div>
   );
