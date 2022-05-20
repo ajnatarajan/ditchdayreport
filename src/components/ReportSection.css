@@ -91,4 +91,9 @@ input[type="checkbox"] {
   accent-color: #785a28;
   transform: scale(1.5);
   -webkit-transform: scale(1.5);
+  cursor: pointer;
+}
+
+.num-reports {
+  margin-bottom: 30px;
 }

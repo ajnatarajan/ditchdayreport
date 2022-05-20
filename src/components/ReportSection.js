@@ -1,5 +1,5 @@
 import "./ReportSection.css";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 async function populateDropdown() {
   let data = await fetch("http://localhost:8000/api/users");
@@ -11,24 +11,29 @@ async function populateDropdown() {
     document.querySelector(".report-dropdown").appendChild(opt);
   }
 }
-
-function executeReport() {
-  const player = document.querySelector(".report-dropdown").value;
-  const is_negative_attitude = document.querySelector("#negative-attitude")
-    .checked;
-  const is_trolling = document.querySelector("#trolling").checked;
-  const is_verbal_abuse = document.querySelector("#verbal-abuse").checked;
-  const is_unskilled_player = document.querySelector("#unskilled-player")
-    .checked;
-  const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
-}
 function populateLeaderboard() {}
 
 function ReportSection() {
+  const [numReports, setNumReports] = useState(0);
   useEffect(() => {
     populateDropdown();
     populateLeaderboard();
   }, []);
+
+  function executeReport() {
+    const player = document.querySelector(".report-dropdown").value;
+    const is_negative_attitude = document.querySelector("#negative-attitude")
+      .checked;
+    const is_trolling = document.querySelector("#trolling").checked;
+    const is_verbal_abuse = document.querySelector("#verbal-abuse").checked;
+    const is_unskilled_player = document.querySelector("#unskilled-player")
+      .checked;
+    const is_is_andy_tong = document.querySelector("#is-andy-tong").checked;
+    setNumReports((prev) => {
+      return prev + 1;
+    });
+  }
+
   return (
     <div className="report-section">
       <div className="report-box">
@@ -109,6 +114,7 @@ function ReportSection() {
         <button className="report-button" onClick={executeReport}>
           REPORT
         </button>
+        <div className="num-reports">Reports submitted: {numReports}</div>
       </div>
     </div>
   );
