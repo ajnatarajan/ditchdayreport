@@ -1,7 +1,17 @@
 import "./ReportSection.css";
 import { useEffect } from "react";
 
-function populateDropdown() {}
+async function populateDropdown() {
+  let data = await fetch("http://localhost:8000/api/users");
+  data = await data.json();
+  for (let i = 0; i < data.length; i++) {
+    let opt = document.createElement("option");
+    opt.value = data[i].first_name + " " + data[i].last_name;
+    opt.textContent = opt.value;
+    document.querySelector(".report-dropdown").appendChild(opt);
+  }
+}
+
 function executeReport() {}
 function populateLeaderboard() {}
 
@@ -18,12 +28,6 @@ function ReportSection() {
             <option value="" disabled selected hidden>
               Choose player to report
             </option>
-            <option value="Steve">Steve Guo</option>
-            <option value="Steve">Steve Guo</option>
-            <option value="Steve">Steve Guo</option>
-            <option value="Steve">Steve Guo</option>
-            <option value="Steve">Steve Guo</option>
-            <option value="Steve">Steve Guo</option>
           </select>
           <div className="report-instructions">
             As inaccurately as you can, please tell us what happened with this

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u5%=03yn#=)0r27&xflvd3+m=b$4de#9#*bnr^qq*fbby2(!oe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -60,9 +60,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'https://localhost:3000'
-]
+# CORS_ORIGIN_WHITELIST = [
+#     'https://localhost:3000'
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -93,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ddayreport',
         'USER': 'postgres',
-        'PASSWORD': 'queueup241',
+        'PASSWORD': 'liquidhacks',
         'HOST': 'localhost',
         'PORT': 5432
     }
