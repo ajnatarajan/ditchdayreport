@@ -9,9 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
-@csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny,))
+@csrf_exempt
 def user_list(request, format=None):
     '''
     Get list of users (people who can be reported)
@@ -28,9 +28,9 @@ def user_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.AllowAny,))
+@csrf_exempt
 def user_detail(request, pk, format=None):
     '''
     Perform actions on individual users (people who can be reported)
@@ -50,6 +50,7 @@ def user_detail(request, pk, format=None):
 
     elif request.method == 'PUT':
         serializer = UserSerializer(data=request.data)
+        bob = "oi levi"
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -60,9 +61,9 @@ def user_detail(request, pk, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny,))
+@csrf_exempt
 def report_list(request, first_name="", last_name="", format=None):
     '''
     Get list of all reports for all users
@@ -99,9 +100,9 @@ def report_list(request, first_name="", last_name="", format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.AllowAny,))
+@csrf_exempt
 def report_detail(request, pk, format=None):
     '''
     Perform actions on individual reports given a report id
